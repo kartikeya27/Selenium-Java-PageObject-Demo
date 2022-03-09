@@ -12,25 +12,17 @@ import com.qa.base.TestBase;
 public class LoginPage extends TestBase {
 
 	// Page Factory -OR
-	@FindBy(name = "user-name")
-	WebElement username;
+	@FindBy(xpath = "//button[contains(text(),'Log In')]")
+	WebElement loginLnk;
 
-	@FindBy(name = "password")
-	WebElement password;
-
-	@FindBy(name = "login-button")
+	@FindBy(id = "logEmailInput")
+	WebElement emailInput;
+	
+	@FindBy(id = "password")
+	WebElement passwordInput;
+	
+	@FindBy(css = "#AvasWidgetLoginSubmit")
 	WebElement loginBtn;
-
-	@FindBy(xpath = "//body/div[@id='root']/div/div[@class='login_wrapper']/div[@class='login_wrapper-inner']/div[@id='login_button_container']"
-			+ "/div[@class='login-box']/form/div[1]/*[1]")
-	WebElement usernameIcon;
-
-	@FindBy(xpath = "//body/div[@id='root']/div/div[@class='login_wrapper']/div[@class='login_wrapper-inner']/div[@id='login_button_container']"
-			+ "/div[@class='login-box']/form/div[2]/*[1]")
-	WebElement passwordIcon;
-
-	@FindBy(xpath = "//*[@id=\"login_button_container\"]/div/form/div[3]")
-	WebElement errorMessageTxt;
 
 	// Initializing the Page Objects:
 	public LoginPage() {
@@ -38,49 +30,25 @@ public class LoginPage extends TestBase {
 	}
 
 	// Actions:
-	public void enterUsername(String uname) {
-		username.clear();
-		username.sendKeys(uname);
-
+	public void enterEmailAddress(String email) {
+		emailInput.clear();
+		emailInput.sendKeys(email);
 	}
 
 	public void enterPassword(String pwd) {
-		password.clear();
-		password.sendKeys(pwd);
+		passwordInput.clear();
+		passwordInput.sendKeys(pwd);
+	}
+	
+	public int verifyRows() {
+		List<WebElement> rows = driver.findElements(By.xpath("//tbody//tr"));
+		return rows.size();
 	}
 
-	public void tapLogin(String username, String password, String errorMes) {
-		enterUsername(username);
-		enterPassword(password);
-		loginBtn.click();
-		isErrorMsgExist(errorMes);
-	}
-
-	public boolean isErrorMsgExist(String errorMessage) {
-		List<WebElement> elements = driver.findElements(By.cssSelector("h3[data-test='error']"));
-
-		for (WebElement elem : elements) {
-			if (elem.getText().contains(errorMessage)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public boolean usernameIcon() {
-		return usernameIcon.isDisplayed();
-	}
-
-	public boolean passwordIcon() {
-		return passwordIcon.isDisplayed();
-	}
-
-	public HomePage login(String username, String password) {
-		enterUsername(username);
+	public HomePage tapLogin(String email, String password) {
+		enterEmailAddress(email);
 		enterPassword(password);
 		loginBtn.click();
 		return new HomePage();
 	}
-
 }
